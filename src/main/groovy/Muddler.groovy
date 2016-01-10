@@ -5,13 +5,14 @@ import static spark.Spark.get
  */
 class Muddler {
 
-    static String SCRIPT_ROOT = "script"
-
     public static void main(String[] args) {
+
+        def scriptRoot = System.properties.get("scriptRoot") ?: "script"
+
         get "/:path1", {req, res ->
 
             def path1 = req.params(":path1")
-            def f = new File("${Muddler.SCRIPT_ROOT}/${path1}.groovy")
+            def f = new File("${scriptRoot}/${path1}.groovy")
             def groovyString = f.getText()
 
             def binding = [
