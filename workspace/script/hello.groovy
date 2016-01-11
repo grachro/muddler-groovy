@@ -1,5 +1,5 @@
 """
 hello wold from script
-b1=${b1}
-b2=${b2}
+viewParams=${viewParams}
+url Param foo=${viewParams["foo"]}
 """

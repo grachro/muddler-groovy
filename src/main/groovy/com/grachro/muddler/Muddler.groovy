@@ -27,8 +27,8 @@ class Muddler {
             def groovyString = f.getText()
 
             def binding = [
-                    databases: this.databases,
                     muddler: this,
+                    viewParams:ViewParameter.newInstance(req),
             ] as Binding
             def shell = new GroovyShell(binding)
             return shell.evaluate(groovyString)
@@ -53,9 +53,23 @@ class Muddler {
         tbl.load(db, sql)
     }
 
+    public String loadHtml(fileName, Map viewParams) {
+        def f = new File("${this.scriptRoot}/${fileName}")
+        def engine = new groovy.text.GStringTemplateEngine()
+
+        def binding = [
+            muddler: this,
+            viewParams:viewParams,
+        ]
+
+
+        def template = engine.createTemplate(f).make(binding)
+        return template.toString()
+    }
+
     public String importTemplete(String templete, Map binding) {
         def f = new File("${this.workspace}/templete/${templete}")
-        def engine = new groovy.text.SimpleTemplateEngine()
+        def engine = new groovy.text.GStringTemplateEngine()
         def template = engine.createTemplate(f).make(binding)
         return template.toString()
     }
