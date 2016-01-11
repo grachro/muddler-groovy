@@ -1,5 +1,7 @@
 package com.grachro.muddler
 
+import spark.Request
+
 import static spark.Spark.get
 
 /**
@@ -7,68 +9,85 @@ import static spark.Spark.get
  */
 class Muddler {
 
-    def workspace
-    def scriptRoot
-    def databases = [:]
+    def static workspace
+    def static scriptRoot
+    def static databases = [:]
 
     public static void main(String[] args) {
-        new Muddler()
-    }
-
-    public Muddler() {
-        this.workspace = System.properties.get("workspace") ?: "workspace"
-        this.scriptRoot = "${this.workspace}/script"
+        workspace = System.properties.get("workspace") ?: "workspace"
+        scriptRoot = "${workspace}/script"
         initDb()
 
         get "/:path1", {req, res ->
 
             def path1 = req.params(":path1")
-            def f = new File("${this.scriptRoot}/${path1}.groovy")
+            def f = new File("${scriptRoot}/${path1}.groovy")
             def groovyString = f.getText()
 
+            def muddler = Muddler.newInstance(req)
             def binding = [
-                    muddler: this,
-                    viewParams:ViewParameter.newInstance(req),
+                    muddler: muddler,
+                    viewParams:muddler.viewParams
             ] as Binding
             def shell = new GroovyShell(binding)
             return shell.evaluate(groovyString)
         }
     }
 
-    private void initDb() {
-        def f = new File("${this.workspace}/conf/database.groovy")
+    private static void initDb() {
+        def f = new File("${workspace}/conf/database.groovy")
         def groovyString = f.getText()
 
         def binding = [
-                databases: this.databases,
+                databases: databases,
         ] as Binding
         def shell = new GroovyShell(binding)
         shell.evaluate(groovyString)
     }
 
+
+    def viewParams = [:]
+
+    public Muddler(Request request) {
+
+        for (String queryParam : request.queryParams()) {
+            String[] ss = request.queryParamsValues(queryParam);
+            if (ss == null) {
+                continue;
+            }
+
+            if (ss.length == 1) {
+                viewParams.put(queryParam, ss[0]);
+            } else {
+                viewParams.put(queryParam, ss);
+            }
+
+        }
+
+    }
+
     public Table loadTable(databaseName,sql) {
-        def db = this.databases[databaseName].call()
+        def db = databases[databaseName].call()
 
         def tbl = Table.newInstance()
         tbl.load(db, sql)
     }
 
-    public String loadHtml(fileName, Map viewParams) {
-        def f = new File("${this.scriptRoot}/${fileName}")
+    public String loadHtml(fileName) {
+        def f = new File("${Muddler.scriptRoot}/${fileName}")
         def engine = new groovy.text.GStringTemplateEngine()
 
         def binding = [
-            muddler: this,
-            viewParams:viewParams,
+                muddler: this,
         ]
-
+        binding += this.viewParams
 
         def template = engine.createTemplate(f).make(binding)
         return template.toString()
     }
 
     public String importTemplete(String templete, Map binding) {
-        def f = new File("${this.workspace}/templete/${templete}")
+        def f = new File("${workspace}/templete/${templete}")
         def engine = new groovy.text.GStringTemplateEngine()
         def template = engine.createTemplate(f).make(binding)
         return template.toString()

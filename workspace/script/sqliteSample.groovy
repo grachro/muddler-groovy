@@ -7,4 +7,4 @@ def tbl = muddler.loadTable("sqlite3", """
 
 viewParams["tbl"] = tbl
 
-muddler.loadHtml("sqliteSample.html", viewParams)
+muddler.loadHtml("sqliteSample.html")

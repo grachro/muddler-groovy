@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f4cb55a2-ba5d-4209-a091-9e051cc6f8a3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/ViewParameter.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/workspace/script/sqliteSample.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Page.groovy" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Muddler.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Muddler.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/workspace/script/hello.groovy" afterPath="$PROJECT_DIR$/workspace/script/hello.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/workspace/script/sqliteSample.groovy" afterPath="$PROJECT_DIR$/workspace/script/sqliteSample.groovy" />
     </list>
     <ignored path="muddler-groovy.iws" />
@@ -93,8 +91,10 @@
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Muddler.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
-              <folding />
+              <caret line="80" column="16" selection-start-line="80" selection-start-column="16" selection-end-line="80" selection-end-column="16" />
+              <folding>
+                <element signature="e#29#49#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -123,7 +123,7 @@
         <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-2.5">
-              <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
+              <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -132,8 +132,8 @@
       <file leaf-file-name="sqliteSample.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31690142">
-              <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.24647887">
+              <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -477,8 +477,9 @@
         <option value="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/RequestManager.groovy" />
         <option value="$PROJECT_DIR$/workspace/script/hello.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/ViewParameter.groovy" />
-        <option value="$PROJECT_DIR$/workspace/script/sqliteSample.groovy" />
         <option value="$PROJECT_DIR$/workspace/script/sqliteSample.html" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Page.groovy" />
+        <option value="$PROJECT_DIR$/workspace/script/sqliteSample.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Muddler.groovy" />
       </list>
     </option>
@@ -1143,14 +1144,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/TableRecord.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="48" selection-start-line="42" selection-start-column="48" selection-end-line="42" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Table.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.333333">
@@ -1177,14 +1170,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/ViewParameter.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3">
-          <caret line="9" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-all/2.3.11/fdf089bfd5d0b7e86100ac599741f65732fc21d5/groovy-all-2.3.11-sources.jar!/groovy/text/GStringTemplateEngine.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -1204,26 +1189,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-all/2.3.11/fdf089bfd5d0b7e86100ac599741f65732fc21d5/groovy-all-2.3.11-sources.jar!/org/codehaus/groovy/runtime/DefaultGroovyMethods.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="12684" column="24" selection-start-line="12684" selection-start-column="24" selection-end-line="12684" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/TableRecord.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="48" selection-start-line="42" selection-start-column="48" selection-end-line="42" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/com/grachro/muddler/Muddler.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
-          <folding />
+          <caret line="80" column="16" selection-start-line="80" selection-start-column="16" selection-end-line="80" selection-end-column="16" />
+          <folding>
+            <element signature="e#29#49#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.5">
-          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
+          <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31690142">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+        <state vertical-scroll-proportion="0.24647887">
+          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
           <folding />
         </state>
       </provider>
