@@ -1,16 +1,19 @@
 import groovy.sql.Sql
+import com.grachro.muddler.Table
 
-def sql = Sql.newInstance("jdbc:sqlite:script/sample.sqlite3", null, null, "org.sqlite.JDBC")
+def db = Sql.newInstance("jdbc:sqlite:script/sample.sqlite3", null, null, "org.sqlite.JDBC")
 
-def pages = [:]
-sql.eachRow("""
+def tbl = Table.newInstance()
+tbl.load(db, """
         select title,url
         from pages
         order by title
-    """) { row ->
-        pages[row.title] = row.url
-    }
+    """)
+
+def viewUtil = new com.grachro.muddler.MuddlerViewUtils()
+
 
 """
-${pages}
+${viewUtil.tableToHtml(tbl)}
 """
+
