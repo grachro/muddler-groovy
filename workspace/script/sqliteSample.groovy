@@ -1,7 +1,6 @@
-import groovy.sql.Sql
 import com.grachro.muddler.Table
 
-def db = Sql.newInstance("jdbc:sqlite:workspace/sample.sqlite3", null, null, "org.sqlite.JDBC")
+def db = databases["sqlite3"].call()
 
 def tbl = Table.newInstance()
 tbl.load(db, """
@@ -10,10 +9,7 @@ tbl.load(db, """
         order by title
     """)
 
-def viewUtil = new com.grachro.muddler.MuddlerViewUtils()
-
-
 """
-${viewUtil.tableToHtml(tbl)}
+${md.tableToHtml(tbl)}
 """
 

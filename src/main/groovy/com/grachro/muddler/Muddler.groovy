@@ -9,11 +9,13 @@ class Muddler {
 
     def static workspace
     def static scriptRoot
+    def static databases = [:]
 
     public static void main(String[] args) {
 
         workspace = System.properties.get("workspace") ?: "workspace"
         scriptRoot = "${workspace}/script"
+        initDb()
 
         get "/:path1", {req, res ->
 
@@ -22,11 +24,22 @@ class Muddler {
             def groovyString = f.getText()
 
             def binding = [
-                    b1:"foo",
-                    b2:["bar","baz",],
+                    databases: databases,
+                    md: new MuddlerViewUtils(),
             ] as Binding
             def shell = new GroovyShell(binding)
             return shell.evaluate(groovyString)
         }
+    }
+
+    private static void initDb() {
+        def f = new File("${workspace}/conf/database.groovy")
+        def groovyString = f.getText()
+
+        def binding = [
+                databases: databases,
+        ] as Binding
+        def shell = new GroovyShell(binding)
+        shell.evaluate(groovyString)
     }
 }
