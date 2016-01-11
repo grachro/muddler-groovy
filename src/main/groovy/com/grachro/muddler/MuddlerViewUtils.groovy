@@ -3,7 +3,7 @@ package com.grachro.muddler
 class MuddlerViewUtils {
 
 	public String importTemplete(String templete, Map binding) {
-		def f = new File("script/${templete}")
+		def f = new File("${Muddler.workspace}/templete/${templete}")
 		def engine = new groovy.text.SimpleTemplateEngine()
 		def template = engine.createTemplate(f).make(binding)
 		return template.toString()

@@ -1,3 +1,5 @@
+package com.grachro.muddler
+
 import static spark.Spark.get
 
 /**
@@ -5,9 +7,13 @@ import static spark.Spark.get
  */
 class Muddler {
 
+    def static workspace
+    def static scriptRoot
+
     public static void main(String[] args) {
 
-        def scriptRoot = System.properties.get("scriptRoot") ?: "script"
+        workspace = System.properties.get("workspace") ?: "workspace"
+        scriptRoot = "${workspace}/script"
 
         get "/:path1", {req, res ->
 
@@ -20,9 +26,7 @@ class Muddler {
                     b2:["bar","baz",],
             ] as Binding
             def shell = new GroovyShell(binding)
-            def result = shell.evaluate(groovyString)
-
-
+            return shell.evaluate(groovyString)
         }
     }
 }

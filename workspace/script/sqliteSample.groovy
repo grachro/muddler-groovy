@@ -1,7 +1,7 @@
 import groovy.sql.Sql
 import com.grachro.muddler.Table
 
-def db = Sql.newInstance("jdbc:sqlite:script/sample.sqlite3", null, null, "org.sqlite.JDBC")
+def db = Sql.newInstance("jdbc:sqlite:workspace/sample.sqlite3", null, null, "org.sqlite.JDBC")
 
 def tbl = Table.newInstance()
 tbl.load(db, """
