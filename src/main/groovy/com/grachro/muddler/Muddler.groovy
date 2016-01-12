@@ -3,6 +3,7 @@ package com.grachro.muddler
 import spark.Request
 
 import static spark.Spark.get
+import static spark.Spark.externalStaticFileLocation
 
 /**
  * Created by grachro on 2016/01/10.
@@ -11,27 +12,51 @@ class Muddler {
 
     def static workspace
     def static scriptRoot
+    def static staticFileRoot
     def static databases = [:]
 
     public static void main(String[] args) {
         workspace = System.properties.get("workspace") ?: "workspace"
         scriptRoot = "${workspace}/script"
+        staticFileRoot = "${workspace}/web"
         initDb()
 
-        get "/:path1", {req, res ->
+        externalStaticFileLocation staticFileRoot
 
+        get "/md/:path1", {req, res ->
             def path1 = req.params(":path1")
-            def f = new File("${scriptRoot}/${path1}.groovy")
-            def groovyString = f.getText()
-
-            def muddler = Muddler.newInstance(req)
-            def binding = [
-                    muddler: muddler,
-                    viewParams:muddler.viewParams
-            ] as Binding
-            def shell = new GroovyShell(binding)
-            return shell.evaluate(groovyString)
+            def path = "${scriptRoot}/${path1}.groovy"
+            evaluateShell(req, res, path)
         }
+
+        get "/md/:path1/:path2", {req, res ->
+            def path1 = req.params(":path1")
+            def path2 = req.params(":path2")
+            def path = "${scriptRoot}/${path1}/${path2}.groovy"
+            evaluateShell(req, res, path)
+        }
+
+        get "/md/:path1/:path2/:path3", {req, res ->
+            def path1 = req.params(":path1")
+            def path2 = req.params(":path2")
+            def path3 = req.params(":path3")
+            def path = "${scriptRoot}/${path1}/${path2}/${path3}.groovy"
+            evaluateShell(req, res, path)
+        }
+    }
+
+    private static evaluateShell(req, res, path) {
+        def f = new File(path)
+        def groovyString = f.getText("UTF-8")
+
+        def muddler = Muddler.newInstance(req)
+        def binding = [
+                muddler: muddler,
+                md: muddler,
+                viewParams:muddler.viewParams
+        ] as Binding
+        def shell = new GroovyShell(binding)
+        return shell.evaluate(groovyString)
     }
 
     private static void initDb() {
@@ -65,6 +90,13 @@ class Muddler {
         }
 
     }
+
+    def loadScript(fileName, Map params) {
+        params.viewParams = viewParams
+        new GroovyShell(params as Binding).parse(new File("${scriptRoot}/${fileName}"))
+    }
+
+
 
     public Table loadTable(databaseName,sql) {
         def db = databases[databaseName].call()
