@@ -24,7 +24,7 @@ public class TableRecord extends HashMap<String, Object> {
 	public String insertSqlForSqliet3(String tableName, List<String> fieldNames) {
 		def result = """
 			insert into ${tableName} (${fieldNames.join(',')})
-			values ("
+			values (
 		"""
 
 		boolean first = true;

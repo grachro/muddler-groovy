@@ -1,7 +1,5 @@
 package com.grachro.muddler;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class FieldGroups extends ArrayList<FieldGroup> {

@@ -1,8 +1,10 @@
 package com.grachro.muddler
 
+import groovy.sql.Sql
 import spark.Request
 
 import static spark.Spark.get
+import static spark.Spark.post
 import static spark.Spark.externalStaticFileLocation
 
 /**
@@ -19,6 +21,11 @@ class Muddler {
         workspace = System.properties.get("workspace") ?: "workspace"
         scriptRoot = "${workspace}/script"
         staticFileRoot = "${workspace}/web"
+
+        databases.localDb = {
+            Sql.newInstance("jdbc:sqlite:${workspace}/muddlerLocal.sqlite3", null, null, "org.sqlite.JDBC")
+        }
+
         initDb()
 
         externalStaticFileLocation staticFileRoot
@@ -37,6 +44,27 @@ class Muddler {
         }
 
         get "/md/:path1/:path2/:path3", {req, res ->
+            def path1 = req.params(":path1")
+            def path2 = req.params(":path2")
+            def path3 = req.params(":path3")
+            def path = "${scriptRoot}/${path1}/${path2}/${path3}.groovy"
+            evaluateShell(req, res, path)
+        }
+
+        post "/md/:path1", {req, res ->
+            def path1 = req.params(":path1")
+            def path = "${scriptRoot}/${path1}.groovy"
+            evaluateShell(req, res, path)
+        }
+
+        post "/md/:path1/:path2", {req, res ->
+            def path1 = req.params(":path1")
+            def path2 = req.params(":path2")
+            def path = "${scriptRoot}/${path1}/${path2}.groovy"
+            evaluateShell(req, res, path)
+        }
+
+        post "/md/:path1/:path2/:path3", {req, res ->
             def path1 = req.params(":path1")
             def path2 = req.params(":path2")
             def path3 = req.params(":path3")
@@ -92,11 +120,19 @@ class Muddler {
     }
 
     def loadScript(fileName, Map params) {
+        params.muddler = this
+        params.md = this
         params.viewParams = viewParams
         new GroovyShell(params as Binding).parse(new File("${scriptRoot}/${fileName}"))
     }
 
+    public Sql openDb(databaseName) {
+        databases[databaseName].call()
+    }
 
+    public Sql openLocalDb() {
+        openDb("localDb")
+    }
 
     public Table loadTable(databaseName,sql) {
         def db = databases[databaseName].call()

@@ -36,6 +36,7 @@ public class Table {
 			throw new NullPointerException("sql is null");
 		}
 
+		println "sql::${sql}"
 
 		this.fieldNames = new ArrayList<String>();
 		this.records = new ArrayList<TableRecord>();
@@ -76,10 +77,6 @@ public class Table {
 
 	public TableRecord getFirst() {
 		return this.records.get(0);
-	}
-
-	public Table forEach(Consumer<TableRecord> executer) {
-		return this.eachRecord(executer);
 	}
 
 	public Table eachRecord(Consumer<TableRecord> executer) {
@@ -164,25 +161,6 @@ public class Table {
 		return this;
 	}
 
-//	public int executeSqlWithTransaction(String sql) {
-//
-//		EntityTransaction tx = this.em.getTransaction();
-//		tx.begin();
-//		int result = executeSql(sql);
-//		tx.commit();
-//
-//		return result;
-//	}
-
-//	public int executeSql(String sql) {
-//		// System.out.println("Table.executeSql:" + sql);
-//
-//		Query query = this.em.createNativeQuery(sql);
-//		int result = query.executeUpdate();
-//
-//		return result;
-//	}
-
 	public String createTableSqlForSqliet3(String tableName) {
 		StringBuilder sb = new StringBuilder();
 
@@ -201,28 +179,26 @@ public class Table {
 		return sb.toString();
 	}
 
-	public void insertSqlsForSqliet3(String tableName, Consumer<String> executer) {
+	public void insertSqlsForSqliet3(String tableName, Closure cl) {
 		for (TableRecord line : this.records) {
 			String sql = line.insertSqlForSqliet3(tableName, this.fieldNames);
-			executer.accept(sql);
+            cl.call(sql);
 		}
-
 	}
 
-//	public void toSqlite3(String tableName) {
-//		String dropSql = "drop table if exists " + tableName;
-//		this.executeSqlWithTransaction(dropSql);
-//
-//		String crateSql = this.createTableSqlForSqliet3(tableName);
-//		this.executeSqlWithTransaction(crateSql);
-//
-//		EntityTransaction tx = this.em.getTransaction();
-//		tx.begin();
-//		this.insertSqlsForSqliet3(tableName, (insertSql) -> {
-//			this.executeSql(insertSql);
-//		});
-//		tx.commit();
-//	}
+	public void toSqlite3(groovy.sql.Sql db, String tableName) {
+		String dropSql = "drop table if exists ${tableName}"
+		db.execute dropSql
+
+		String crateSql = this.createTableSqlForSqliet3(tableName);
+        db.execute crateSql
+
+		this.insertSqlsForSqliet3(tableName){insertSql ->
+
+            println "insertSql=${insertSql}"
+            db.execute insertSql
+        }
+	}
 //
 //	public void mergeSqlite3(String tableName) {
 //
@@ -257,8 +233,8 @@ public class Table {
 		this.fieldGroups = fieldGroups;
 	}
 
-	public Table doSomething(Consumer<Table> somethig) {
-		somethig.accept(this);
+	public Table doSomething(Closure cl) {
+        cl.call(this);
 		return this;
 	}
 

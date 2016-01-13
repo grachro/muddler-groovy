@@ -1,8 +1,5 @@
 package com.grachro.muddler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FieldGroup {
 	private String name;
 	private List<Field> fields = new ArrayList<Field>();

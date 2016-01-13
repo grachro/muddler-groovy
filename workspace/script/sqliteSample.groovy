@@ -4,6 +4,10 @@ def tbl = md.loadTable("sqlite3", """
         order by title
     """)
 
+def localDb = md.openLocalDb()
+
+
+tbl.toSqlite3(localDb,"page_loaded")
 
 viewParams["tbl"] = tbl
 
