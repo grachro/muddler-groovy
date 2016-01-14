@@ -81,7 +81,9 @@ class Muddler {
         def binding = [
                 muddler: muddler,
                 md: muddler,
-                viewParams:muddler.viewParams
+                viewParams:muddler.viewParams,
+                workspace:workspace,
+                scriptRoot:scriptRoot,
         ] as Binding
         def shell = new GroovyShell(binding)
         return shell.evaluate(groovyString)
@@ -119,10 +121,16 @@ class Muddler {
 
     }
 
+    def loadScript(fileName) {
+        loadScript fileName, [:]
+    }
+
     def loadScript(fileName, Map params) {
         params.muddler = this
         params.md = this
         params.viewParams = viewParams
+        params.workspace = workspace
+        params.scriptRoot = scriptRoot
         new GroovyShell(params as Binding).parse(new File("${scriptRoot}/${fileName}"))
     }
 
@@ -135,6 +143,11 @@ class Muddler {
     }
 
     public Table loadTable(databaseName,sql) {
+
+        if (databases[databaseName] == null) {
+            throw new IllegalArgumentException("databaseName \"${databaseName}\" is unregistered. See [workspace]/conf/database.groovy")
+        }
+
         def db = databases[databaseName].call()
 
         def tbl = Table.newInstance()

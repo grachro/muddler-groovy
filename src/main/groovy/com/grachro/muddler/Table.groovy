@@ -6,7 +6,6 @@ import java.util.function.Function
 
 public class Table {
 
-
 	private List<String> fieldNames = new ArrayList<String>();
 	private List<TableRecord> records = new ArrayList<TableRecord>();
 	private FieldGroups fieldGroups;
@@ -16,7 +15,6 @@ public class Table {
 
 	public Table() {
 	}
-
 
 	public String getQuery() {
 		return this.query;
@@ -36,7 +34,9 @@ public class Table {
 			throw new NullPointerException("sql is null");
 		}
 
-		println "sql::${sql}"
+
+        def tripdSql = sql.stripIndent()
+		println "sql::${tripdSql}"
 
 		this.fieldNames = new ArrayList<String>();
 		this.records = new ArrayList<TableRecord>();
@@ -47,7 +47,7 @@ public class Table {
 			}
 		}
 
-		db.eachRow(sql,printColNames) { row ->
+		db.eachRow(tripdSql,printColNames) { row ->
 
 			TableRecord m = new TableRecord();
 			for (String fieldName : this.fieldNames) {
@@ -113,7 +113,7 @@ public class Table {
 		this.indexMap.put(key, record);
 	}
 
-	public TableRecord seek(String key) {
+	public TableRecord seekSafe(String key) {
 		if (this.indexMap == null) {
 			return new TableRecord.TableEnptyRecord();
 		}
@@ -125,7 +125,7 @@ public class Table {
 		return line;
 	}
 
-	public TableRecord seekOrNull(String key) {
+	public TableRecord seek(String key) {
 		if (this.indexMap == null) {
 			return null;
 		}
@@ -193,37 +193,31 @@ public class Table {
 		String crateSql = this.createTableSqlForSqliet3(tableName);
         db.execute crateSql
 
-		this.insertSqlsForSqliet3(tableName){insertSql ->
+		db.withTransaction {
+			this.insertSqlsForSqliet3(tableName){insertSql ->
+				println "insertSql=${insertSql}"
+				db.execute insertSql
+			}
+		}
+	}
 
-            println "insertSql=${insertSql}"
-            db.execute insertSql
+	public void mergeSqlite3(groovy.sql.Sql db, String tableName) {
+
+		String existSql = "select count(*) cnt from sqlite_master where type='table' and name='" + tableName + "'";
+		def rows = db.rows(existSql);
+		int cnt = (Integer) rows[0].get("cnt");
+
+		if (cnt == 0) {
+			String crateSql = this.createTableSqlForSqliet3(tableName);
+            db.execute crateSql
+		}
+
+        db.withTransaction {
+            this.insertSqlsForSqliet3(tableName){insertSql ->
+                db.execute insertSql
+            }
         }
 	}
-//
-//	public void mergeSqlite3(String tableName) {
-//
-//		if (this.em == null) {
-//			throw new NullPointerException("em is null");
-//		}
-//
-//		Table t = new Table(rm);
-//		t.em = this.em;
-//		String existSql = "select count(*) cnt from sqlite_master where type='table' and name='" + tableName + "'";
-//		TableRecord r = t.loadFirst(existSql);
-//		int cnt = (Integer) r.get("cnt");
-//
-//		if (cnt == 0) {
-//			String crateSql = this.createTableSqlForSqliet3(tableName);
-//			this.executeSqlWithTransaction(crateSql);
-//		}
-//
-//		EntityTransaction tx = this.em.getTransaction();
-//		tx.begin();
-//		this.insertSqlsForSqliet3(tableName, (insertSql) -> {
-//			this.executeSql(insertSql);
-//		});
-//		tx.commit();
-//	}
 
 	public FieldGroups getFieldGroups() {
 		return fieldGroups;
