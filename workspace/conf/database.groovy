@@ -1,5 +1,7 @@
-import groovy.sql.Sql
+database name:"sqlite3",
+        url:"jdbc:sqlite:workspace/sample.sqlite3",
+        user:null,
+        password:null,
+        driverClassName:"org.sqlite.JDBC"
 
-databases["sqlite3"] = {
-    Sql.newInstance("jdbc:sqlite:workspace/sample.sqlite3", null, null, "org.sqlite.JDBC")
-}
+

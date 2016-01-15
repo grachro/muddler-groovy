@@ -22,39 +22,47 @@ public class TableRecord extends HashMap<String, Object> {
 	}
 
 	public String insertSqlForSqliet3(String tableName, List<String> fieldNames) {
-		def result = """
-			insert into ${tableName} (${fieldNames.join(',')})
-			values (
+		"""insert into ${tableName} (${fieldNames.join(',')})
+			values (${fieldValueToSqlValues(fieldNames)})
 		"""
+	}
 
-		boolean first = true;
-		for (String fieldName : fieldNames) {
-			if (first) {
-				first = false;
-			} else {
-				result += ","
-			}
+    private String fieldValueToSqlValues(List<String> fieldNames) {
+        def result = ""
+        boolean first = true;
+        fieldNames.each {fieldName ->
+            if (first) {
+                first = false;
+            } else {
+                result += ","
+            }
+            result += fieldValueToSqlValue(fieldName)
+        }
+        return result
+    }
 
-			Object value = this.get(fieldName);
-			if (value instanceof Integer) {
-				result += this.get(fieldName)
-			} else if (value instanceof Double) {
-				result += this.get(fieldName)
-			} else if (value instanceof Float) {
-				result += this.get(fieldName)
-			} else if (value instanceof BigDecimal) {
-				result += this.get(fieldName)
-			} else if (value instanceof String) {
-				String s = value.replaceAll("'", "''");
-				result += "'${s}'"
-			} else {
-				result += "'${this.get(fieldName)}'"
-			}
 
+
+    private Object fieldValueToSqlValue(String fieldName) {
+		Object value = this.get(fieldName);
+
+		if (value == null) {
+			return null
+		} else if (value instanceof Integer) {
+			return value
+		} else if (value instanceof Double) {
+			return value
+		} else if (value instanceof Float) {
+			return value
+		} else if (value instanceof BigDecimal) {
+			return value
+		} else if (value instanceof String) {
+			String s = value.replaceAll("'", "''");
+			return "'${s}'"
 		}
-		result += ")"
 
-		return result
+        return "'${value}'"
+
 	}
 
 }

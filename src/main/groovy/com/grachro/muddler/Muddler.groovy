@@ -1,6 +1,7 @@
 package com.grachro.muddler
 
 import groovy.sql.Sql
+import groovy.text.GStringTemplateEngine
 import spark.Request
 
 import static spark.Spark.get
@@ -71,6 +72,39 @@ class Muddler {
             def path = "${scriptRoot}/${path1}/${path2}/${path3}.groovy"
             evaluateShell(req, res, path)
         }
+
+        //DB登録画面 表示
+        get "/system/database", { req, res ->
+            showDatabaseEditHtml(getClass(),loadDatabaseScript())
+        }
+
+        //DB登録画面 登録
+        post "/system/database", { req, res ->
+            def dbscript = req.queryParams("databases")
+            println dbscript
+
+            try {
+                refreshDb(dbscript)
+                saveDatabaseScript dbscript
+                showDatabaseEditHtml(getClass(),loadDatabaseScript())
+            } catch(e) {
+                e.printStackTrace()
+                showDatabaseEditHtml(getClass(),dbscript)
+            }
+
+        }
+    }
+
+    private static showDatabaseEditHtml(clazz,dbScript) {
+        def input = clazz.getClassLoader().getResourceAsStream("database.html")
+        def htmlTemplege = input.getText("UTF-8")
+
+        def binding = [
+                script:dbScript,
+        ]
+
+        def template = new GStringTemplateEngine().createTemplate(htmlTemplege).make(binding)
+        return template.toString()
     }
 
     private static evaluateShell(req, res, path) {
@@ -89,12 +123,30 @@ class Muddler {
         return shell.evaluate(groovyString)
     }
 
-    private static void initDb() {
+    private static loadDatabaseScript() {
         def f = new File("${workspace}/conf/database.groovy")
-        def groovyString = f.getText()
+        f.getText()
+    }
+
+    private static saveDatabaseScript(text) {
+        def f = new File("${workspace}/conf/database.groovy")
+        f.setText(text,"UTF-8")
+    }
+
+    private static void initDb() {
+        refreshDb(loadDatabaseScript())
+    }
+
+    private static void refreshDb(groovyString) {
+        def database = {Map params ->
+            databases[params.name] = {
+                Sql.newInstance(params.url, params.user, params.password, params.driverClassName)
+            }
+            println "add database ${params.name} -> ${params.url}"
+        }
 
         def binding = [
-                databases: databases,
+                database:database,
         ] as Binding
         def shell = new GroovyShell(binding)
         shell.evaluate(groovyString)
@@ -156,10 +208,11 @@ class Muddler {
 
     public String loadHtml(fileName) {
         def f = new File("${Muddler.scriptRoot}/${fileName}")
-        def engine = new groovy.text.GStringTemplateEngine()
+        def engine = new GStringTemplateEngine()
 
         def binding = [
                 muddler: this,
+                md: this,
         ]
         binding += this.viewParams
 
@@ -169,7 +222,7 @@ class Muddler {
 
     public String importTemplete(String templete, Map binding) {
         def f = new File("${workspace}/templete/${templete}")
-        def engine = new groovy.text.GStringTemplateEngine()
+        def engine = new GStringTemplateEngine()
         def template = engine.createTemplate(f).make(binding)
         return template.toString()
     }

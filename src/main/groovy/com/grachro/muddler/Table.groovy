@@ -161,6 +161,10 @@ public class Table {
 		return this;
 	}
 
+    public List<List<TableRecord>> partitionRecords(int size) {
+        this.records.collate(size)
+    }
+
 	public String createTableSqlForSqliet3(String tableName) {
 		StringBuilder sb = new StringBuilder();
 
@@ -186,7 +190,33 @@ public class Table {
 		}
 	}
 
-	public void toSqlite3(groovy.sql.Sql db, String tableName) {
+    public String editInsertSqlsForSqliet3(String tableName, List<TableRecord> recoreds) {
+        for (TableRecord line : this.records) {
+            String sql = line.insertSqlForSqliet3(tableName, this.fieldNames);
+            cl.call(sql);
+        }
+    }
+
+    private String editSqlite3InsertSql(String tableName, List<TableRecord> recoreds) {
+        def insertSql = "insert into " + tableName + " (" + fieldNames.join(',') + ") values "
+
+        def first = true
+        recoreds.each {record ->
+            if (first) {
+                first = false
+            } else {
+                insertSql += ","
+            }
+            insertSql += "(${record.fieldValueToSqlValues(fieldNames)})"
+        }
+        return insertSql
+    }
+
+    public void toSqlite3(groovy.sql.Sql db, String tableName) {
+        toSqlite3(db, tableName, 100)
+    }
+
+	public void toSqlite3(groovy.sql.Sql db, String tableName, int onceInsertRecordSize) {
 		String dropSql = "drop table if exists ${tableName}"
 		db.execute dropSql
 
@@ -194,14 +224,20 @@ public class Table {
         db.execute crateSql
 
 		db.withTransaction {
-			this.insertSqlsForSqliet3(tableName){insertSql ->
-				println "insertSql=${insertSql}"
-				db.execute insertSql
-			}
+
+            this.partitionRecords(onceInsertRecordSize).each {recoreds ->
+                def insertSql = editSqlite3InsertSql(tableName, recoreds)
+                println "insertSql=${insertSql}"
+                db.execute insertSql
+	        }
 		}
 	}
 
-	public void mergeSqlite3(groovy.sql.Sql db, String tableName) {
+    public void mergeSqlite3(groovy.sql.Sql db, String tableName) {
+        mergeSqlite3(db, tableName, 100)
+    }
+
+	public void mergeSqlite3(groovy.sql.Sql db, String tableName, int onceInsertRecordSize) {
 
 		String existSql = "select count(*) cnt from sqlite_master where type='table' and name='" + tableName + "'";
 		def rows = db.rows(existSql);
@@ -213,7 +249,9 @@ public class Table {
 		}
 
         db.withTransaction {
-            this.insertSqlsForSqliet3(tableName){insertSql ->
+            this.partitionRecords(onceInsertRecordSize).each {recoreds ->
+                def insertSql = editSqlite3InsertSql(tableName, recoreds)
+                println "insertSql=${insertSql}"
                 db.execute insertSql
             }
         }
@@ -248,4 +286,42 @@ public class Table {
 		}
 		return sb.toString();
 	}
+
+	public Table leftJoin(Table another, Closure thisKey, Closure anotherKey,Closure cl) {
+
+		def anotherMap = [:]
+		another.eachRecord{anotherRecord ->
+			def aKey = anotherKey.call(anotherRecord)
+			anotherMap[aKey] = anotherRecord
+		}
+
+		this.eachRecord{thisRecord ->
+			def tKey = thisKey.call(thisRecord)
+			def anotherRecord = anotherMap[tKey]
+			if (anotherRecord != null) {
+				cl.call(thisRecord,anotherRecord)
+			}
+		}
+
+		return this;
+	}
+
+    public Table rightJoin(Table another, Closure thisKey, Closure anotherKey,Closure cl) {
+
+        def thisMap = [:]
+        this.eachRecord{thisRecord ->
+            def tKey = thisKey.call(thisRecord)
+            thisMap[tKey] = thisRecord
+        }
+
+        another.eachRecord{anotherRecord ->
+            def aKey = anotherKey.call(anotherRecord)
+            def thisRecord = thisMap[aKey]
+            if (thisRecord != null) {
+                cl.call(thisRecord,anotherRecord)
+            }
+        }
+
+        return this;
+    }
 }
