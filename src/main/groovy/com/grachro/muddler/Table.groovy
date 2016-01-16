@@ -303,44 +303,19 @@ public class Table {
 		return map
 	}
 
-	public Table findAnother(Table anotherTable, Closure thisTableKey, Closure anotherTableKey,Closure cl) {
+	public Table eachRecodWithAnother(Table anotherTable, Closure thisTableKey, Closure anotherTableKey,Closure cl) {
 
 		def anotherMap = anotherTable.toMap(anotherTableKey)
-		this.eachRecord{thisRecord ->
+		this.eachRecord { thisRecord ->
 			def tKey = thisTableKey.call(thisRecord)
 			def anotherRecords = anotherMap[tKey]
 			if (anotherRecords != null) {
-				cl.call(thisRecord,anotherRecords)
+				cl.call(thisRecord, anotherRecords)
 			} else {
-				cl.call(thisRecord,[])
+				cl.call(thisRecord, [])
 			}
 		}
 
 		return this;
 	}
-
-    public Table rightJoin(Table another, Closure thisKey, Closure anotherKey,Closure cl) {
-
-        def thisMap = [:]
-        this.eachRecord{thisRecord ->
-            def tKey = thisKey.call(thisRecord)
-			if(thisMap[tKey] == null) {
-				thisMap[tKey] = [thisRecord]
-			} else {
-				thisMap[tKey] += thisRecord
-			}
-		}
-
-        another.eachRecord{anotherRecord ->
-            def aKey = anotherKey.call(anotherRecord)
-            def thisRecords = thisMap[aKey]
-            if (thisRecords != null) {
-                cl.call(thisRecords,anotherRecord)
-            } else {
-				cl.call([],anotherRecord)
-			}
-        }
-
-        return this;
-    }
 }

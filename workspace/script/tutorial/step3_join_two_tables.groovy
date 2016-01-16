@@ -12,16 +12,13 @@ def recipes = loadTable "sqlite3", """
   order by COCKTAIL_NAME, RECIPE_INDEX
 """
 
-//3. recipes right join cocktails
-recipes.rightJoin( cocktails,
-    {cocktailRecord -> cocktailRecord.COCKTAIL_NAME},
-    {recipeRecord -> recipeRecord.COCKTAIL_NAME},
-    {recipeRecords, cocktailRecord ->
-        ingredients = []
-        recipeRecords.each{recipeRecord ->
-            ingredients += recipeRecord["INGREDIENT"] ?: ""
-        }
-        cocktailRecord.INGREDIENT = ingredients
+//3. find cocktails recipe list.
+cocktails.eachRecodWithAnother( recipes,
+    {cocktail -> cocktail.COCKTAIL_NAME},
+    {recipe -> recipe.COCKTAIL_NAME},
+    {cocktail, findedRecipes ->
+        def ingredients = findedRecipes.inject([]){ list , recipe -> list += recipe.INGREDIENT }
+        cocktail.INGREDIENT = ingredients
     }
 )
 
