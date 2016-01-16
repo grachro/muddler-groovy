@@ -58,9 +58,7 @@ public class SystemScriptEdit {
 
         post "/system/scriptDelete", { req, res ->
             def scriptPath = trimQueryPath(req,"scriptPath")
-            def binding = [
-                scriptList:loadAllScripitNames(),
-            ]
+            def binding = [:]
 
             try {
                 deleteScript scriptPath
@@ -69,6 +67,8 @@ public class SystemScriptEdit {
                 e.printStackTrace()
                 binding.message = e.getStackTrace()
             }
+            binding.scriptList = loadAllScripitNames()
+
             def htmlTemplete = SystemUtils.loadResourceFile("scriptList.html")
             def template = new GStringTemplateEngine().createTemplate(htmlTemplete).make(binding)
             return template.toString()

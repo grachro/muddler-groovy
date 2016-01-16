@@ -288,22 +288,26 @@ public class Table {
 		return sb.toString();
 	}
 
-	public Table leftJoin(Table another, Closure thisKey, Closure anotherKey,Closure cl) {
+	public Map toMap(Closure key) {
+		def map = [:]
+		this.eachRecord{anotherRecord ->
+			def k = key.call(anotherRecord)
 
-		def anotherMap = [:]
-		another.eachRecord{anotherRecord ->
-			def aKey = anotherKey.call(anotherRecord)
-
-			if(anotherMap[aKey] == null) {
-				anotherMap[aKey] = [anotherRecord]
+			if(map[k] == null) {
+				map[k] = [anotherRecord]
 			} else {
-				anotherMap[aKey] += anotherRecord
+				map[k] += anotherRecord
 			}
 
 		}
+		return map
+	}
 
+	public Table findAnother(Table anotherTable, Closure thisTableKey, Closure anotherTableKey,Closure cl) {
+
+		def anotherMap = anotherTable.toMap(anotherTableKey)
 		this.eachRecord{thisRecord ->
-			def tKey = thisKey.call(thisRecord)
+			def tKey = thisTableKey.call(thisRecord)
 			def anotherRecords = anotherMap[tKey]
 			if (anotherRecords != null) {
 				cl.call(thisRecord,anotherRecords)
