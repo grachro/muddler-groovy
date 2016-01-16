@@ -2,13 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>database Mudder</title>
+    <title>edit Database Connections(JDBC) - Mudder</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
 </head>
 <body>
+<h1>edit Database Connections(JDBC)</h1>
 <form method="post">
     <textarea name="databases" rows="20" cols="100">${script}</textarea>
     <br>
     <input type="submit" value="save">
 </form>
+<pre>
+${message ?: ""}
+</pre>
+
+<section>
+    <a href="/system/menu">return</a>
+</section>
 </body>
 </html>

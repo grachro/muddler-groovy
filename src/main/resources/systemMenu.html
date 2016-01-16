@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Preference - Muddler</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+</head>
+<body>
+<h1>System Preference</h1>
+<ul>
+    <li><a href="/system/database">edit Database Connections(JDBC)</a></li>
+    <li><a href="/system/scriptList">edit SQL Scripts</a></li>
+    <li>run SQL Scripts
+        <ul>
+            <% scriptList.each {scriptPath -> %>
+            <li>
+                <a href="/md/${scriptPath}">${scriptPath}</a>
+            </li>
+            <% } %>
+        </ul>
+    </li>
+</ul>
+
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>edit SQL Scripts - Mudder</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+<h1>edit SQL Scripts</h1>
+
+<section>
+    <h2>${scriptPath}</h2>
+    <form method="post" action="/system/scriptSave">
+        <input type="hidden" name="scriptPath" value="${scriptPath}">
+        <textarea name="scriptText" rows="20" cols="100">${scriptText}</textarea>
+        <br>
+        <input type="submit" value="save">
+    </form>
+    <div>
+        <pre>
+        ${message ?: ""}
+        </pre>
+    </div>
+</section>
+
+
+<section>
+    <a href="/system/scriptList">return</a>
+</section>
+</body>
+</html>

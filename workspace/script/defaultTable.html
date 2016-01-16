@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query result - Muddler</title>
+    <link rel="stylesheet" href="/css/muddler.css">
+</head>
+<body>
+<h1>Query result - Muddler</h1>
+<% tables.each{table -> %>
+<section>
+ ${md.tableToHtml(table)}
+<pre>${table.query}</pre>
+</section>
+<% } %>
+</body>
+</html>

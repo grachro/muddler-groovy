@@ -37,6 +37,7 @@ public class Table {
 
         def tripdSql = sql.stripIndent()
 		println "sql::${tripdSql}"
+		this.query = tripdSql
 
 		this.fieldNames = new ArrayList<String>();
 		this.records = new ArrayList<TableRecord>();
@@ -292,14 +293,22 @@ public class Table {
 		def anotherMap = [:]
 		another.eachRecord{anotherRecord ->
 			def aKey = anotherKey.call(anotherRecord)
-			anotherMap[aKey] = anotherRecord
+
+			if(anotherMap[aKey] == null) {
+				anotherMap[aKey] = [anotherRecord]
+			} else {
+				anotherMap[aKey] += anotherRecord
+			}
+
 		}
 
 		this.eachRecord{thisRecord ->
 			def tKey = thisKey.call(thisRecord)
-			def anotherRecord = anotherMap[tKey]
-			if (anotherRecord != null) {
-				cl.call(thisRecord,anotherRecord)
+			def anotherRecords = anotherMap[tKey]
+			if (anotherRecords != null) {
+				cl.call(thisRecord,anotherRecords)
+			} else {
+				cl.call(thisRecord,[])
 			}
 		}
 
@@ -311,15 +320,21 @@ public class Table {
         def thisMap = [:]
         this.eachRecord{thisRecord ->
             def tKey = thisKey.call(thisRecord)
-            thisMap[tKey] = thisRecord
-        }
+			if(thisMap[tKey] == null) {
+				thisMap[tKey] = [thisRecord]
+			} else {
+				thisMap[tKey] += thisRecord
+			}
+		}
 
         another.eachRecord{anotherRecord ->
             def aKey = anotherKey.call(anotherRecord)
-            def thisRecord = thisMap[aKey]
-            if (thisRecord != null) {
-                cl.call(thisRecord,anotherRecord)
-            }
+            def thisRecords = thisMap[aKey]
+            if (thisRecords != null) {
+                cl.call(thisRecords,anotherRecord)
+            } else {
+				cl.call([],anotherRecord)
+			}
         }
 
         return this;

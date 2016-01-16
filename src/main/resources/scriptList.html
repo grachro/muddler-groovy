@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SQL Script List - Mudder</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style type="text/css">.list-from {display: inline;}</style>
+    <script type="text/javascript">
+        function confirmDelete() {
+            if (!confirm("Are you sure you want to delete this SQL Script?")) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+<h1>SQL Script</h1>
+
+<section>
+    <h2>List</h2>
+    <ul>
+        <% scriptList.each {scriptPath -> %>
+        <li>
+            <a href="/md/${scriptPath}">${scriptPath}</a>
+            <form class="list-from" method="post" action="/system/scriptShow">
+                <input type="hidden" name="scriptPath" value="${scriptPath}">
+                <input type="submit" value="edit">
+            </form>
+            <form class="list-from" method="post" action="/system/scriptDelete">
+                <input type="hidden" name="scriptPath" value="${scriptPath}">
+                <input type="submit" value="delete" onclick="return confirmDelete();">
+            </form>
+        </li>
+        </li>
+        <% } %>
+    </ul>
+</section>
+
+<section>
+    <h2>New Script</h2>
+    <form method="post" action="/system/scriptAdd">
+        name <input type="text" name="scriptPath" value="" size="50">
+        <input type="submit" value="add">
+    </form>
+</section>
+
+<section>
+    <a href="/system/menu">return</a>
+</section>
+
+</body>
+</html>
