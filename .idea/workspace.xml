@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f4cb55a2-ba5d-4209-a091-9e051cc6f8a3" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/workspace/script/sqliteSample.groovy" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/workspace/sample.sqlite3" afterPath="$PROJECT_DIR$/workspace/sample.sqlite3" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/database.html" afterPath="$PROJECT_DIR$/src/main/resources/database.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/scriptEdit.html" afterPath="$PROJECT_DIR$/src/main/resources/scriptEdit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/scriptList.html" afterPath="$PROJECT_DIR$/src/main/resources/scriptList.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/systemMenu.html" afterPath="$PROJECT_DIR$/src/main/resources/systemMenu.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/workspace/script/sqliteSample.groovy" afterPath="$PROJECT_DIR$/workspace/script/sqliteSample.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/workspace/script/sqliteSample.html" afterPath="$PROJECT_DIR$/workspace/script/sqliteSample.html" />
     </list>
     <ignored path="muddler-groovy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -115,7 +111,7 @@
       <file leaf-file-name="scriptList.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/scriptList.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38961038">
+            <state vertical-scroll-proportion="0.97402596">
               <caret line="25" column="85" selection-start-line="25" selection-start-column="85" selection-end-line="25" selection-end-column="85" />
               <folding>
                 <element signature="n#style#0;n#a#0;n#li#0;n#ul#0;n#section#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1140,22 +1136,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1187,14 +1167,6 @@
           <folding>
             <element signature="e#29#50#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1335,14 +1307,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33169532">
           <caret line="260" column="47" selection-start-line="260" selection-start-column="37" selection-end-line="260" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/workspace/script/sqliteSample.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1501,7 +1465,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/scriptList.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38961038">
+        <state vertical-scroll-proportion="0.97402596">
           <caret line="25" column="85" selection-start-line="25" selection-start-column="85" selection-end-line="25" selection-end-column="85" />
           <folding>
             <element signature="n#style#0;n#a#0;n#li#0;n#ul#0;n#section#0;n#body#0;n#html#0;n#!!top" expanded="true" />
