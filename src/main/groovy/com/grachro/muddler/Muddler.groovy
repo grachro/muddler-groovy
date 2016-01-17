@@ -34,8 +34,8 @@ class Muddler {
         get "/system/menu", { req, res ->
             def htmlTemplete = SystemUtils.loadResourceFile("systemMenu.html")
             def binding = [
-                    scriptList:SystemScriptEdit.loadAllScripitNames(),
-                    message:null,
+                    scriptList: SystemScriptEdit.loadAllScripitNames(),
+                    message   : null,
             ]
 
             def template = new GStringTemplateEngine().createTemplate(htmlTemplete).make(binding)
@@ -45,20 +45,20 @@ class Muddler {
         SystemDatabaseEdit.init()
         SystemScriptEdit.init()
 
-        get "/md/:path1", {req, res ->
+        get "/md/:path1", { req, res ->
             def path1 = req.params(":path1")
             def path = "${scriptRoot}/${path1}.groovy"
             evaluateShell(req, res, path)
         }
 
-        get "/md/:path1/:path2", {req, res ->
+        get "/md/:path1/:path2", { req, res ->
             def path1 = req.params(":path1")
             def path2 = req.params(":path2")
             def path = "${scriptRoot}/${path1}/${path2}.groovy"
             evaluateShell(req, res, path)
         }
 
-        get "/md/:path1/:path2/:path3", {req, res ->
+        get "/md/:path1/:path2/:path3", { req, res ->
             def path1 = req.params(":path1")
             def path2 = req.params(":path2")
             def path3 = req.params(":path3")
@@ -66,20 +66,20 @@ class Muddler {
             evaluateShell(req, res, path)
         }
 
-        post "/md/:path1", {req, res ->
+        post "/md/:path1", { req, res ->
             def path1 = req.params(":path1")
             def path = "${scriptRoot}/${path1}.groovy"
             evaluateShell(req, res, path)
         }
 
-        post "/md/:path1/:path2", {req, res ->
+        post "/md/:path1/:path2", { req, res ->
             def path1 = req.params(":path1")
             def path2 = req.params(":path2")
             def path = "${scriptRoot}/${path1}/${path2}.groovy"
             evaluateShell(req, res, path)
         }
 
-        post "/md/:path1/:path2/:path3", {req, res ->
+        post "/md/:path1/:path2/:path3", { req, res ->
             def path1 = req.params(":path1")
             def path2 = req.params(":path2")
             def path3 = req.params(":path3")
@@ -90,7 +90,6 @@ class Muddler {
     }
 
 
-
     private static evaluateShell(req, res, path) {
         try {
             def f = new File(path)
@@ -98,19 +97,19 @@ class Muddler {
 
             def muddler = Muddler.newInstance(req)
             def binding = [
-                    muddler: muddler,
-                    md: muddler,
-                    loadTable: muddler.loadTableCl,
-                    loadHtml: muddler.loadHtmlCl,
+                    muddler    : muddler,
+                    md         : muddler,
+                    loadTable  : muddler.loadTableCl,
+                    loadHtml   : muddler.loadHtmlCl,
                     tableToHtml: muddler.tableToHtmlCl,
-                    showTable: muddler.showTableCl,
-                    viewParams:muddler.viewParams,
-                    workspace:workspace,
-                    scriptRoot:scriptRoot,
+                    showTable  : muddler.showTableCl,
+                    viewParams : muddler.viewParams,
+                    workspace  : workspace,
+                    scriptRoot : scriptRoot,
             ] as Binding
             def shell = new GroovyShell(binding)
             return shell.evaluate(groovyString)
-        } catch(e) {
+        } catch (e) {
             e.printStackTrace()
 
             StringWriter sw = new StringWriter()
@@ -123,7 +122,7 @@ class Muddler {
 
     def viewParams = [:]
 
-    def loadTableCl = {databaseName,sql ->
+    def loadTableCl = { databaseName, sql ->
         if (databases[databaseName] == null) {
             throw new IllegalArgumentException("databaseName \"${databaseName}\" is unregistered. See [workspace]/conf/database.groovy")
         }
@@ -139,10 +138,10 @@ class Muddler {
         def engine = new GStringTemplateEngine()
 
         def binding = [
-                muddler: this,
-                md: this,
-                workspace:workspace,
-                scriptRoot:scriptRoot,
+                muddler   : this,
+                md        : this,
+                workspace : workspace,
+                scriptRoot: scriptRoot,
         ]
         binding += this.viewParams
 
@@ -150,15 +149,15 @@ class Muddler {
         return template.toString()
     }
 
-    def tableToHtmlCl = {Table table ->
+    def tableToHtmlCl = { Table table ->
         if (table.fieldGroups == null) {
-            importTemplete "simpleTable.groovy_templete", ["table":table]
+            importTemplete "simpleTable.groovy_templete", ["table": table]
         } else {
-            importTemplete "groupTable.groovy_templete", ["table":table]
+            importTemplete "groupTable.groovy_templete", ["table": table]
         }
     }
 
-    def showTableCl = {Table... tables ->
+    def showTableCl = { Table... tables ->
         this.viewParams.tables = tables
         loadHtmlCl("defaultTable.html")
     }
@@ -202,8 +201,8 @@ class Muddler {
         openDb("localDb")
     }
 
-    public Table loadTable(databaseName,sql) {
-        loadTableCl(databaseName,sql)
+    public Table loadTable(databaseName, sql) {
+        loadTableCl(databaseName, sql)
     }
 
     public String loadHtml(fileName) {
