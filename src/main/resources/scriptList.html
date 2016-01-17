@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SQL Script List - Mudder</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/muddler.css">
     <style type="text/css">.list-from {display: inline;}</style>
     <script type="text/javascript">
         function confirmDelete() {
@@ -22,7 +22,8 @@
     <ul>
         <% scriptList.each {scriptPath -> %>
         <li>
-            <a href="/md/${scriptPath}">${scriptPath}</a>
+            ${scriptPath}
+            <a href="/md/${scriptPath}" style="font-size:0.8em;text-decoration: none;">show</a>
             <form class="list-from" method="post" action="/system/scriptShow">
                 <input type="hidden" name="scriptPath" value="${scriptPath}">
                 <input type="submit" value="edit">

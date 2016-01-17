@@ -19,7 +19,7 @@ def jointed = md.loadTable("sqlite3", """
             from category_page
             order by category_name,title
         """)
-        .leftJoin(tbl,
+        .eachRecodWithAnother(tbl,
             {thisRecord -> thisRecord.title},
             {anotherRecord -> anotherRecord.title},
             {thisRecord,anotherRecord ->
@@ -29,29 +29,5 @@ def jointed = md.loadTable("sqlite3", """
         .setFieldNames(["category_name","title","url"])
 viewParams.jointed = jointed
 
-
-def a = md.loadTable("sqlite3", """
-            select category_name,title
-            from category_page
-            order by category_name,title
-        """)
-
-def b = md.loadTable("sqlite3", """
-            select title,url
-                from pages
-                order by title
-        """)
-
-        b.rightJoin(a,
-            {thisRecord -> thisRecord.title},
-            {anotherRecord -> anotherRecord.title},
-            {thisRecord,anotherRecord ->
-                anotherRecord.url = thisRecord.url
-            }
-        )
-
-a.setFieldNames(["category_name","title","url"])
-
-viewParams.jointed2 = a
 
 md.loadHtml("sqliteSample.html")
