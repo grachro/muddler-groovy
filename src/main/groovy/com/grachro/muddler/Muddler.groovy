@@ -27,6 +27,7 @@ class Muddler {
 
         externalStaticFileLocation staticFileRoot
 
+        //make default workspace
         if (!new File(workspace).exists()){
             def parent = new File(workspace).parentFile
             parent.mkdirs()
@@ -39,9 +40,6 @@ class Muddler {
             } finally {
                 input.close()
             }
-
-
-           // new AntBuilder().unzip(src:"workspace.zip", dest:"workspace")
         }
 
         get "/", { req, res ->
