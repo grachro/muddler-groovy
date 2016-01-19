@@ -22,6 +22,9 @@ class Muddler {
 
     public static void main(String[] args) {
         workspace = System.properties.get("workspace") ?: "workspace"
+        println "workspace=${workspace}"
+
+
         scriptRoot = "${workspace}/script"
         staticFileRoot = "${workspace}/web"
 
@@ -29,7 +32,7 @@ class Muddler {
 
         //make default workspace
         if (!new File(workspace).exists()){
-            def parent = new File(workspace).parentFile
+            java.io.File parent = new File(workspace).parentFile
             parent.mkdirs()
 
             def input = MuddlerUtils.loadResourceFile("workspace.zip")
