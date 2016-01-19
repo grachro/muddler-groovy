@@ -22,17 +22,35 @@ class Muddler {
 
     public static void main(String[] args) {
         workspace = System.properties.get("workspace") ?: "workspace"
+        println "workspace=${workspace}"
+
+
         scriptRoot = "${workspace}/script"
         staticFileRoot = "${workspace}/web"
 
         externalStaticFileLocation staticFileRoot
+
+        //make default workspace
+        if (!new File(workspace).exists()){
+            java.io.File parent = new File(workspace).parentFile
+            parent.mkdirs()
+
+            def input = MuddlerUtils.loadResourceFile("workspace.zip")
+            try {
+                def file = new File(parent,"workspace.zip")
+                file.append(input)
+                new AntBuilder().unzip(src:file.absolutePath, dest:workspace)
+            } finally {
+                input.close()
+            }
+        }
 
         get "/", { req, res ->
             res.redirect("/index.html")
         }
 
         get "/system/menu", { req, res ->
-            def htmlTemplete = SystemUtils.loadResourceFile("systemMenu.html")
+            def htmlTemplete = MuddlerUtils.loadResourceFileText("systemMenu.html")
             def binding = [
                     scriptList: SystemScriptEdit.loadAllScripitNames(),
                     message   : null,
