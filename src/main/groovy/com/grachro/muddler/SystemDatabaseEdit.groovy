@@ -36,7 +36,7 @@ public class SystemDatabaseEdit {
     }
 
     private static editHtml(dbScript,String message) {
-        def htmlTemplete = SystemUtils.loadResourceFile("database.html")
+        def htmlTemplete = MuddlerUtils.loadResourceFileText("database.html")
 
         def binding = [
             script:dbScript,

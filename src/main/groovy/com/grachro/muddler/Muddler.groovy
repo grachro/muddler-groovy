@@ -27,12 +27,29 @@ class Muddler {
 
         externalStaticFileLocation staticFileRoot
 
+        if (!new File(workspace).exists()){
+            def parent = new File(workspace).parentFile
+            parent.mkdirs()
+
+            def input = MuddlerUtils.loadResourceFile("workspace.zip")
+            try {
+                def file = new File(parent,"workspace.zip")
+                file.append(input)
+                new AntBuilder().unzip(src:file.absolutePath, dest:workspace)
+            } finally {
+                input.close()
+            }
+
+
+           // new AntBuilder().unzip(src:"workspace.zip", dest:"workspace")
+        }
+
         get "/", { req, res ->
             res.redirect("/index.html")
         }
 
         get "/system/menu", { req, res ->
-            def htmlTemplete = SystemUtils.loadResourceFile("systemMenu.html")
+            def htmlTemplete = MuddlerUtils.loadResourceFileText("systemMenu.html")
             def binding = [
                     scriptList: SystemScriptEdit.loadAllScripitNames(),
                     message   : null,

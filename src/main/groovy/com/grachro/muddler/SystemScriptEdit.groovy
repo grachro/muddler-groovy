@@ -4,7 +4,7 @@ import groovy.text.GStringTemplateEngine
 
 import static spark.Spark.get
 import static spark.Spark.post
-import static com.grachro.muddler.SystemUtils.trimQueryPath
+import static MuddlerUtils.trimQueryPath
 
 public class SystemScriptEdit {
 
@@ -12,7 +12,7 @@ public class SystemScriptEdit {
     public static init() {
         //スクリプト一覧画面 表示
         get "/system/scriptList", { req, res ->
-            def htmlTemplete = SystemUtils.loadResourceFile("scriptList.html")
+            def htmlTemplete = MuddlerUtils.loadResourceFileText("scriptList.html")
             def binding = [
                     scriptList:loadAllScripitNames(),
                     message:null,
@@ -69,7 +69,7 @@ public class SystemScriptEdit {
             }
             binding.scriptList = loadAllScripitNames()
 
-            def htmlTemplete = SystemUtils.loadResourceFile("scriptList.html")
+            def htmlTemplete = MuddlerUtils.loadResourceFileText("scriptList.html")
             def template = new GStringTemplateEngine().createTemplate(htmlTemplete).make(binding)
             return template.toString()
         }
@@ -109,7 +109,7 @@ public class SystemScriptEdit {
     }
 
     private static String getEditHtml(scriptPath, scriptText, message) {
-        def htmlTemplete = SystemUtils.loadResourceFile("scriptEdit.html")
+        def htmlTemplete = MuddlerUtils.loadResourceFileText("scriptEdit.html")
         def binding = [
                 scriptPath:scriptPath,
                 scriptText:scriptText,
