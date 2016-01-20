@@ -13,7 +13,7 @@ def recipes = loadTable "sqlite3", """
 """
 
 //3. find cocktails recipe list.
-cocktails.eachRecodWithAnother( recipes,
+cocktails.eachRecordWithAnother( recipes,
     {cocktail -> cocktail.COCKTAIL_NAME},
     {recipe -> recipe.COCKTAIL_NAME},
     {cocktail, findedRecipes ->

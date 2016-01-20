@@ -303,7 +303,7 @@ public class Table {
         return map
     }
 
-    public Table eachRecodWithAnother(Table anotherTable, Closure thisTableKey, Closure anotherTableKey, Closure cl) {
+    public Table eachRecordWithAnother(Table anotherTable, Closure thisTableKey, Closure anotherTableKey, Closure cl) {
 
         def anotherMap = anotherTable.toMap(anotherTableKey)
         this.eachRecord { thisRecord ->

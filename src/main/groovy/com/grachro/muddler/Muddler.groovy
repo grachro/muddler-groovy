@@ -21,7 +21,15 @@ class Muddler {
     private static SystemDatabaseEdit systemConf
 
     public static void main(String[] args) {
-        workspace = System.properties.get("workspace") ?: "workspace"
+        start()
+    }
+
+    public static void start(String[] args) {
+
+        def ws = System.properties.get("workspace") ?: "workspace"
+        println "workspace args=${ws}"
+
+        workspace = new java.io.File(ws).getAbsolutePath()
         println "workspace=${workspace}"
 
 
@@ -32,6 +40,7 @@ class Muddler {
 
         //make default workspace
         if (!new File(workspace).exists()){
+            println "create default workspace"
             java.io.File parent = new File(workspace).parentFile
             parent.mkdirs()
 
