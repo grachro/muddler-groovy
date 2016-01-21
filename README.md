@@ -1,8 +1,11 @@
 # Muddler
 
-Muddlerは、複数種類、複数コネクションのRDBから、スクリプトで動的に作成したSQLで問い合わせを行える、ブラウザベースのDBクライアントです。Java8で動作し、スクリプトはGroovy言語で作成できます。
+Muddlerは、複数種類、複数コネクションのRDBから、スクリプトで動的に作成したSQLで問い合わせを行える、ブラウザベースのSQLクライアントです。Java8で動作し、スクリプトはGroovy言語で作成できます。
 
-
+Muddler is web based SQL client.
+Muddler can connect multiple detabase types.(MySQL,PostgreSQL,Oracle,etc)
+Muddler can connect multiple detabase connection.
+Muddler can edit SQL dynamically using Groovy.
 
 
 ## Install
