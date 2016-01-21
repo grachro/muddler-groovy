@@ -3,8 +3,11 @@
 Muddlerは、複数種類、複数コネクションのRDBから、スクリプトで動的に作成したSQLで問い合わせを行える、ブラウザベースのSQLクライアントです。Java8で動作し、スクリプトはGroovy言語で作成できます。
 
 Muddler is web based SQL client.
+
 Muddler can connect multiple detabase types.(MySQL,PostgreSQL,Oracle,etc)
+
 Muddler can connect multiple detabase connection.
+
 Muddler can edit SQL dynamically using Groovy.
 
 
@@ -34,7 +37,7 @@ Muddler can edit SQL dynamically using Groovy.
 </repositories>
 ```
 
-2.Create Muddler start class.
+2.Create main class and call Muddler start.
 
 ```java:Sample.java
 package your_package;
@@ -47,3 +50,9 @@ public class Sample {
     }
 }
 ```
+
+3.Run and View
+```
+http://localhost:4567
+```
+
