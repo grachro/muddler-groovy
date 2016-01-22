@@ -118,11 +118,13 @@ class Muddler {
 
 
     private static evaluateShell(req, res, path) {
+
+        def muddler = null
         try {
             def f = new File(path)
             def groovyString = f.getText("UTF-8")
 
-            def muddler = Muddler.newInstance(req)
+            muddler = Muddler.newInstance(req)
             def binding = [
                     muddler    : muddler,
                     md         : muddler,
@@ -143,11 +145,16 @@ class Muddler {
             PrintWriter pw = new PrintWriter(sw)
             e.printStackTrace(pw)
             "<pre>" + sw.toString() + "</pre>"
+        } finally {
+            if (muddler != null) {
+                muddler.closeAllDb()
+            }
         }
 
     }
 
     def viewParams = [:]
+    def opendDbs = []
 
     def loadTableCl = { databaseName, sql ->
         if (databases[databaseName] == null) {
@@ -221,11 +228,23 @@ class Muddler {
     }
 
     public Sql openDb(databaseName) {
-        databases[databaseName].call()
+        Sql db = databases[databaseName].call()
+        opendDbs += db
+        return  db
     }
 
     public Sql openLocalDb() {
         openDb("localDb")
+    }
+
+    public void closeAllDb() {
+        this.opendDbs.each{db ->
+            try{
+                db.close()
+            } catch(e) {
+                e.printStackTrace()
+            }
+        }
     }
 
     public Table loadTable(databaseName, sql) {
