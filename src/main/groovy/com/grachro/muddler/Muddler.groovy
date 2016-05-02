@@ -129,6 +129,7 @@ class Muddler {
                     muddler    : muddler,
                     md         : muddler,
                     loadTable  : muddler.loadTableCl,
+                    loadLocalTable  : muddler.loadLocalTableCl,
                     loadHtml   : muddler.loadHtmlCl,
                     tableToHtml: muddler.tableToHtmlCl,
                     showTable  : muddler.showTableCl,
@@ -163,6 +164,12 @@ class Muddler {
 
         def db = databases[databaseName].call()
 
+        def tbl = Table.newInstance()
+        tbl.load(db, sql)
+    }
+
+    def loadLocalTableCl = { databaseName, sql ->
+        def db = SystemDatabaseEdit.openLocalDb(databaseName)
         def tbl = Table.newInstance()
         tbl.load(db, sql)
     }
@@ -237,6 +244,10 @@ class Muddler {
         openDb("localDb")
     }
 
+    public Sql openLocalDb(databaseName) {
+        return  SystemDatabaseEdit.openLocalDb(databaseName)
+    }
+
     public void closeAllDb() {
         this.opendDbs.each{db ->
             try{
@@ -249,6 +260,10 @@ class Muddler {
 
     public Table loadTable(databaseName, sql) {
         loadTableCl(databaseName, sql)
+    }
+
+    public Table loadLocalTable(databaseName, sql) {
+        loadLocalTableCl(databaseName, sql)
     }
 
     public String loadHtml(fileName) {

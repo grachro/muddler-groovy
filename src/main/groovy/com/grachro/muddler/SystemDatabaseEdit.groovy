@@ -80,4 +80,14 @@ public class SystemDatabaseEdit {
         shell.evaluate(groovyString)
     }
 
+    public static Sql openLocalDb(databaseName) {
+
+        if (Muddler.databases[databaseName] == null) {
+            Muddler.databases[databaseName] = {
+                Sql.newInstance("jdbc:sqlite:${Muddler.workspace}/${dbName}.sqlite3", null, null, "org.sqlite.JDBC")
+            }
+        }
+
+        return Sql.newInstance("jdbc:sqlite:${Muddler.workspace}/${databaseName}.sqlite3", null, null, "org.sqlite.JDBC")
+    }
 }
